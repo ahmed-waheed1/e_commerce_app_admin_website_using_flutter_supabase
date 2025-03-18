@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/common_widgets/custom_elevated_button.dart';
 import '../../../../core/common_widgets/custom_text_form_feild.dart';
 import '../../../../core/utils/app_sizes.dart';
-import '../../../../core/common_widgets/custom_elevated_button.dart';
 import '../../../../core/utils/images_manager.dart';
+import '../../domain/entities/category.dart';
+import '../widgets/popular_products.dart';
 
 class HomeView extends StatelessWidget {
   static const String routeName = '/home_view';
@@ -35,8 +37,20 @@ class HomeView extends StatelessWidget {
             ImagesManager.buy,
             fit: BoxFit.fill,
           ),
+          const SizedBox(height: AppSizes.s20),
+          const PopularProducts(),
         ],
       ),
     );
   }
 }
+
+// todo implement categories list
+// todo to be refactored to use a provider or a bloc
+List<Category> categories = [
+  Category(name: 'Electronics', icon: Icons.electrical_services),
+  Category(name: 'Fashion', icon: Icons.checkroom),
+  Category(name: 'Home', icon: Icons.home),
+  Category(name: 'Beauty', icon: Icons.brush),
+  Category(name: 'Sports', icon: Icons.sports),
+];
