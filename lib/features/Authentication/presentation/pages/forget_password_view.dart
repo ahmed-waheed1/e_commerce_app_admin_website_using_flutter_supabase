@@ -5,7 +5,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
-import '../widgets/custom_elevated_button.dart';
+import '../../../../core/common_widgets/custom_elevated_button.dart';
 
 class ForgetPasswordView extends StatelessWidget {
   static const String routeName = '/forget-password-view';

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_sizes.dart';
+
+import '../utils/app_colors.dart';
+import '../utils/app_sizes.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
     super.key,
     required this.onPressed,
     required this.widget,
+    this.borderSize = AppSizes.s8,
   });
 
   final VoidCallback? onPressed;
   final Widget? widget;
+  final double borderSize;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class CustomElevatedButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.kPrimaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.s16),
+            borderRadius: BorderRadius.circular(borderSize),
           ),
           foregroundColor: AppColors.kWhiteColor,
         ),

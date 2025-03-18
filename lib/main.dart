@@ -8,6 +8,8 @@ import 'core/utils/style_manager.dart';
 import 'features/Authentication/presentation/cubit/authentication_cubit.dart';
 import 'features/Authentication/presentation/pages/forget_password_view.dart';
 import 'features/Authentication/presentation/pages/login_view.dart';
+import 'features/nav_bar/presentation/cubit/nav_bar_cubit.dart';
+import 'features/nav_bar/presentation/pages/main_home_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +27,15 @@ class FlutterEcommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthenticationCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationCubit>(
+          create: (context) => AuthenticationCubit(),
+        ),
+        BlocProvider<NavBarCubit>(
+          create: (context) => NavBarCubit(),
+        ),
+      ],
       child: GetMaterialApp(
         theme: ThemeData(
           fontFamily: StyleManager.fontFamily,
@@ -39,8 +48,10 @@ class FlutterEcommerceApp extends StatelessWidget {
           GetPage(
               name: ForgetPasswordView.routeName,
               page: () => const ForgetPasswordView()),
+          GetPage(
+              name: MainHomeView.routeName, page: () => const MainHomeView()),
         ],
-        initialRoute: LoginView.routeName,
+        initialRoute: MainHomeView.routeName,
       ),
     );
   }

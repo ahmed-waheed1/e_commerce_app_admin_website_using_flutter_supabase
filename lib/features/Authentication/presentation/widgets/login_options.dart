@@ -4,7 +4,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
-import 'custom_elevated_button.dart';
+import '../../../../core/common_widgets/custom_elevated_button.dart';
 
 class LoginOptions extends StatelessWidget {
   final String text;
@@ -29,7 +29,8 @@ class LoginOptions extends StatelessWidget {
             fontSize: AppSizes.s22,
           ),
         ),
-        CustomElevatedButton(onPressed: onPressed, widget: widget),
+        CustomElevatedButton(
+            onPressed: onPressed, widget: widget, borderSize: AppSizes.s16),
       ],
     );
   }
