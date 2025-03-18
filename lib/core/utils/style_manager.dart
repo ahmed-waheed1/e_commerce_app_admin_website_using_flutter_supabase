@@ -43,10 +43,12 @@ TextStyle getExtraLightStyle(
 TextStyle getRegularStyle({
   required Color color,
   required double fontSize,
+  TextDecoration? textDecoration,
 }) {
   return TextStyle(
     color: color,
     fontSize: fontSize,
+    decoration: textDecoration,
     fontFamily: GoogleFonts.lexendDeca().fontFamily,
     fontWeight: FontWeight.w400,
   );

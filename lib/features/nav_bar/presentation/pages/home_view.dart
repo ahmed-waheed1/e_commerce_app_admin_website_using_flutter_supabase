@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../core/common_widgets/custom_cached_network_image.dart';
 import '../../../../core/common_widgets/custom_elevated_button.dart';
 import '../../../../core/common_widgets/custom_text_form_feild.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -53,9 +56,9 @@ class HomeView extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(AppSizes.s20),
-                      child: Image(
-                          image: NetworkImage(
-                              'https://img.freepik.com/free-vector/sale-banner-with-product-description_1361-1333.jpg?t=st=1742339904~exp=1742343504~hmac=f1b53a5c1c08f31a14b5820ddc37decb09afd42a4fc98afec5f05efde05a743f&w=1380')),
+                      child: CustomCachedNetworkImage(
+                        imageUrl: AppStrings.imageUrl,
+                      ),
                     ),
                     Positioned(
                       top: AppSizes.s10,
@@ -76,6 +79,67 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: AppSizes.s20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppStrings.prductName,
+                        style: getMediumStyle(
+                            color: AppColors.kBlackColor,
+                            fontSize: AppSizes.s20),
+                      ),
+                      IconButton(
+                        color: AppColors.kGreyColor,
+                        onPressed: () {
+                          // todo implement see all functionality
+                        },
+                        icon: const Icon(Icons.favorite_rounded),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSizes.s10),
+                Padding(
+                  padding: const EdgeInsets.all(AppSizes.s8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            AppStrings.newPrice,
+                            style: getBoldStyle(
+                                color: AppColors.kBlackColor,
+                                fontSize: AppSizes.s20),
+                          ),
+                          const SizedBox(height: AppSizes.s10),
+                          Text(
+                            AppStrings.oldPrice,
+                            style: getRegularStyle(
+                                textDecoration: TextDecoration.lineThrough,
+                                color: AppColors.kGreyColor,
+                                fontSize: AppSizes.s16),
+                          ),
+                          const SizedBox(height: AppSizes.s10),
+                        ],
+                      ),
+                      CustomElevatedButton(
+                        borderSize: AppSizes.s8,
+                        onPressed: () {
+                          // todo implement add to cart functionality
+                        },
+                        widget: Text(
+                          AppStrings.addToCart,
+                          style: getMediumStyle(
+                              color: AppColors.kWhiteColor,
+                              fontSize: AppSizes.s20),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           )
