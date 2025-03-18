@@ -1,0 +1,2 @@
+D:/learning_flutter/e_commerce_app_admin_website_using_flutter_supabase/android/app/.cxx/Debug/2x3q591z/x86/CMakeFiles/edit_cache.dir
+D:/learning_flutter/e_commerce_app_admin_website_using_flutter_supabase/android/app/.cxx/Debug/2x3q591z/x86/CMakeFiles/rebuild_cache.dir

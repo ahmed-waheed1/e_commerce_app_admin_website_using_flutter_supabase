@@ -11,14 +11,11 @@ import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
 import '../cubit/visiability_cubit.dart';
-import '../widgets/custom_text_button.dart';
 import '../widgets/login_options.dart';
-import 'forget_password_view.dart';
-import 'register_view.dart';
 
-class LoginView extends StatelessWidget {
+class RegisterView extends StatelessWidget {
   static const String routeName = '/login-view';
-  const LoginView({super.key});
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +45,13 @@ class LoginView extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomTextFormFeild(
+                        labelText: AppStrings.name,
+                        keyboardType: TextInputType.name,
+                      ),
+                      const SizedBox(height: AppSizes.s20),
+                      CustomTextFormFeild(
                         labelText: AppStrings.email,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: AppSizes.s20),
                       BlocProvider(
@@ -57,6 +60,7 @@ class LoginView extends StatelessWidget {
                           builder: (context, state) {
                             return CustomTextFormFeild(
                               labelText: AppStrings.password,
+                              keyboardType: TextInputType.visiblePassword,
                               obscureText: !state,
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -76,22 +80,8 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: AppSizes.s20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CustomTextButton(
-                            text: AppStrings.forgotPassword,
-                            onPressed: () {
-                              log('Forgot Password tapped');
-                              Navigator.pushNamed(
-                                  context, ForgetPasswordView.routeName);
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: AppSizes.s20),
                       LoginOptions(
-                        text: AppStrings.login,
+                        text: AppStrings.register,
                         onPressed: () {},
                       ),
                       const SizedBox(height: AppSizes.s20),
@@ -110,14 +100,14 @@ class LoginView extends StatelessWidget {
                       const SizedBox(height: AppSizes.s20),
                       RichText(
                         text: TextSpan(
-                          text: AppStrings.dosenotHaveAccount,
+                          text: AppStrings.alreadyHaveAnAccount,
                           style: getRegularStyle(
                             color: AppColors.kBlackColor,
                             fontSize: AppSizes.s16,
                           ),
                           children: [
                             TextSpan(
-                              text: AppStrings.signUp,
+                              text: AppStrings.login,
                               style: getRegularStyle(
                                 color: AppColors.kPrimaryColor,
                                 fontSize: AppSizes.s16,
@@ -125,15 +115,13 @@ class LoginView extends StatelessWidget {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   log('Sign Up tapped');
-                                  navigateOff(
-                                    context,
-                                    const RegisterView(),
-                                  );
+                                  navigateBack(context);
                                 },
                             ),
                           ],
                         ),
                       ),
+                      const SizedBox(height: AppSizes.s20),
                     ],
                   ),
                 ),
