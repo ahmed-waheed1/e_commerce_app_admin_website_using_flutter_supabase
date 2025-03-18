@@ -17,4 +17,5 @@ class AppStrings {
   static const String forgetPassword =
       'Please enter your email address to reset your password.';
   static const String name = 'Name';
+  static const String specialOffer = 'Special Offer';
 }
