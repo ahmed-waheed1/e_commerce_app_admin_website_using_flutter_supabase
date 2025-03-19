@@ -22,7 +22,7 @@ class PopularProducts extends StatelessWidget {
         const SizedBox(height: AppSizes.s10),
         // todo implement popular products list
         SizedBox(
-          height: AppSizes.s200,
+          height: AppSizes.s140,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
