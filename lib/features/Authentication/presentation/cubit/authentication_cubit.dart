@@ -1,92 +1,89 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/user_model.dart';
+
+import '../../../../core/services/service_locator.dart';
+import '../../data/models/user_data_model.dart';
+import '../../domain/repositories/authentication_repository.dart';
+
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  AuthenticationCubit() : super(AuthenticationInitial());
+  final AuthenticationRepository _repository;
+  final logger = locator<Logger>();
 
-  SupabaseClient client = Supabase.instance.client;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  Future<void> login({required String email, required String password}) async {
+  AuthenticationCubit(this._repository) : super(AuthenticationInitial());
+
+  Future<void> login() async {
     emit(LoginLoading());
     try {
-      await client.auth.signInWithPassword(password: password, email: email);
+      await _repository.login(
+        email: emailController.text,
+        password: passwordController.text,
+      );
       await getUserData();
       emit(LoginSuccess());
     } on AuthException catch (e) {
-      log(e.toString());
+      logger.e(e.toString());
       emit(LoginError(e.message));
     } catch (e) {
-      log(e.toString());
+      logger.e(e.toString());
       emit(LoginError(e.toString()));
     }
   }
 
-  Future<void> register(
-      {required String name,
-      required String email,
-      required String password}) async {
+  Future<void> register() async {
     emit(SignUpLoading());
     try {
-      await client.auth.signUp(password: password, email: email);
-      await addUserData(name: name, email: email);
+      await _repository.register(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      await addUserData(
+        name: nameController.text,
+        email: emailController.text,
+      );
       await getUserData();
       emit(SignUpSuccess());
     } on AuthException catch (e) {
-      log(e.toString());
+      logger.e(e.toString());
       emit(SignUpError(e.message));
     } catch (e) {
-      log(e.toString());
+      logger.e(e.toString());
       emit(SignUpError(e.toString()));
     }
   }
 
-  GoogleSignInAccount? googleUser;
-  Future<AuthResponse> googleSignIn() async {
+  Future<void> googleSignIn() async {
     emit(GoogleSignInLoading());
-    const webClientId =
-        '695947127810-ed6st2u22ov1a33bckft4j172h3ofiau.apps.googleusercontent.com';
-
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      // clientId: iosClientId,
-      serverClientId: webClientId,
-    );
-    googleUser = await googleSignIn.signIn();
-    if (googleUser == null) {
-      return AuthResponse();
-    }
-    final googleAuth = await googleUser!.authentication;
-    final accessToken = googleAuth.accessToken;
-    final idToken = googleAuth.idToken;
-
-    if (accessToken == null || idToken == null) {
+    try {
+      final response = await _repository.googleSignIn();
+      await addUserData(
+        name: response.user!.userMetadata!['name'],
+        email: response.user!.email!,
+      );
+      await getUserData();
+      emit(GoogleSignInSuccess());
+    } catch (e) {
+      logger.e(e.toString());
       emit(GoogleSignInError());
-      return AuthResponse();
     }
-
-    AuthResponse response = await client.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: idToken,
-      accessToken: accessToken,
-    );
-    await addUserData(name: googleUser!.displayName!, email: googleUser!.email);
-    await getUserData();
-
-    emit(GoogleSignInSuccess());
-    return response;
   }
 
   Future<void> signOut() async {
     emit(LogoutLoading());
     try {
-      await client.auth.signOut();
+      await _repository.signOut();
       emit(LogoutSuccess());
     } catch (e) {
-      log(e.toString());
+      logger.e(e.toString());
       emit(LogoutError());
     }
   }
@@ -94,28 +91,24 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> resetPassword({required String email}) async {
     emit(PasswordResetLoading());
     try {
-      await client.auth.resetPasswordForEmail(email);
+      await _repository.resetPassword(email: email);
       emit(PasswordResetSuccess());
     } catch (e) {
-      log(e.toString());
-      emit(PasswordResetError());
+      logger.e(e.toString());
+      emit(PasswordResetError(
+        e.toString(),
+      ));
     }
   }
 
-  // insert  => add only
-  // upsert => add or update
   Future<void> addUserData(
       {required String name, required String email}) async {
     emit(UserDataAddedLoading());
     try {
-      await client.from('users').upsert({
-        "user_id": client.auth.currentUser!.id,
-        "name": name,
-        "email": email,
-      });
+      await _repository.addUserData(name: name, email: email);
       emit(UserDataAddedSuccess());
     } catch (e) {
-      log(e.toString());
+      logger.e(e.toString());
       emit(UserDataAddedError());
     }
   }
@@ -124,18 +117,23 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> getUserData() async {
     emit(GetUserDataLoading());
     try {
-      final List<Map<String, dynamic>> data = await client
-          .from('users')
-          .select()
-          .eq("user_id", client.auth.currentUser!.id);
-      userDataModel = UserDataModel(
-          email: data[0]["email"],
-          name: data[0]["name"],
-          userId: data[0]["user_id"]);
-      emit(GetUserDataSuccess());
+      userDataModel = (await _repository.getUserData());
+      emit(GetUserDataSuccess(
+        userDataModel,
+      ));
     } catch (e) {
-      log(e.toString());
-      emit(GetUserDataError());
+      logger.e(e.toString());
+      emit(GetUserDataError(
+        e.toString(),
+      ));
     }
+  }
+
+  @override
+  Future<void> close() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    return super.close();
   }
 }

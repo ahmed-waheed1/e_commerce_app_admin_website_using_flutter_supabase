@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../pages/favorite_view.dart';
 import '../pages/home_view.dart';
-import '../pages/profile_view.dart';
+import '../../../profile/presentation/pages/profile_view.dart';
 import '../pages/store_view.dart';
 import 'nav_bar_state.dart';
 

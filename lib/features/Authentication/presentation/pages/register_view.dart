@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,13 +8,20 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
+import '../../../nav_bar/presentation/pages/main_home_view.dart';
+import '../cubit/authentication_cubit.dart';
 import '../cubit/visiability_cubit.dart';
 import '../widgets/login_options.dart';
 
-class RegisterView extends StatelessWidget {
-  static const String routeName = '/login-view';
+class RegisterView extends StatefulWidget {
+  static const String routeName = '/register-view';
   const RegisterView({super.key});
 
+  @override
+  _RegisterViewState createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,87 +47,130 @@ class RegisterView extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(AppSizes.s16),
-                  child: Column(
-                    children: [
-                      CustomTextFormFeild(
-                        labelText: AppStrings.name,
-                        keyboardType: TextInputType.name,
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      CustomTextFormFeild(
-                        labelText: AppStrings.email,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      BlocProvider(
-                        create: (context) => VisiabilityCubit(),
-                        child: BlocBuilder<VisiabilityCubit, bool>(
-                          builder: (context, state) {
-                            return CustomTextFormFeild(
-                              labelText: AppStrings.password,
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: !state,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  state
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                  color: AppColors.kBlackColor,
+                  child: Form(
+                    key: context.read<AuthenticationCubit>().formKey,
+                    child: Column(
+                      children: [
+                        CustomTextFormFeild(
+                          controller: context
+                              .read<AuthenticationCubit>()
+                              .nameController,
+                          labelText: AppStrings.name,
+                          keyboardType: TextInputType.name,
+                        ),
+                        const SizedBox(height: AppSizes.s20),
+                        CustomTextFormFeild(
+                          controller: context
+                              .read<AuthenticationCubit>()
+                              .emailController,
+                          labelText: AppStrings.email,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: AppSizes.s20),
+                        BlocProvider(
+                          create: (context) => VisiabilityCubit(),
+                          child: BlocBuilder<VisiabilityCubit, bool>(
+                            builder: (context, state) {
+                              return CustomTextFormFeild(
+                                controller: context
+                                    .read<AuthenticationCubit>()
+                                    .passwordController,
+                                labelText: AppStrings.password,
+                                keyboardType: TextInputType.visiblePassword,
+                                obscureText: !state,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    state
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                    color: AppColors.kBlackColor,
+                                  ),
+                                  onPressed: () {
+                                    context
+                                        .read<VisiabilityCubit>()
+                                        .toggleVisibility();
+                                  },
                                 ),
-                                onPressed: () {
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.s20),
+                        BlocConsumer<AuthenticationCubit, AuthenticationState>(
+                          listener: (context, state) {
+                            if (state is SignUpSuccess) {
+                              // Navigate to the home screen or show success message
+                              Navigator.pushNamed(
+                                  context, MainHomeView.routeName);
+                            } else if (state is SignUpError) {
+                              // Show error message
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                            }
+                          },
+                          builder: (context, state) {
+                            if (state is SignUpLoading) {
+                              return CircularProgressIndicator();
+                            }
+                            return LoginOptions(
+                              text: AppStrings.register,
+                              onPressed: () {
+                                if (context
+                                    .read<AuthenticationCubit>()
+                                    .formKey
+                                    .currentState!
+                                    .validate()) {
                                   context
-                                      .read<VisiabilityCubit>()
-                                      .toggleVisibility();
-                                },
-                              ),
+                                      .read<AuthenticationCubit>()
+                                      .register();
+                                }
+                              },
                             );
                           },
                         ),
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      LoginOptions(
-                        text: AppStrings.register,
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      Text(
-                        AppStrings.or,
-                        style: getRegularStyle(
-                          color: AppColors.kBlackColor,
-                          fontSize: AppSizes.s16,
-                        ),
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      LoginOptions(
-                        text: AppStrings.continueWithGoogle,
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      RichText(
-                        text: TextSpan(
-                          text: AppStrings.alreadyHaveAnAccount,
+                        const SizedBox(height: AppSizes.s20),
+                        Text(
+                          AppStrings.or,
                           style: getRegularStyle(
                             color: AppColors.kBlackColor,
                             fontSize: AppSizes.s16,
                           ),
-                          children: [
-                            TextSpan(
-                              text: AppStrings.login,
-                              style: getRegularStyle(
-                                color: AppColors.kPrimaryColor,
-                                fontSize: AppSizes.s16,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  log('Sign Up tapped');
-                                  navigateBack(context);
-                                },
-                            ),
-                          ],
                         ),
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                    ],
+                        const SizedBox(height: AppSizes.s20),
+                        LoginOptions(
+                          text: AppStrings.continueWithGoogle,
+                          onPressed: () {
+                            context.read<AuthenticationCubit>().googleSignIn();
+                          },
+                        ),
+                        const SizedBox(height: AppSizes.s20),
+                        RichText(
+                          text: TextSpan(
+                            text: AppStrings.alreadyHaveAnAccount,
+                            style: getRegularStyle(
+                              color: AppColors.kBlackColor,
+                              fontSize: AppSizes.s16,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: AppStrings.login,
+                                style: getRegularStyle(
+                                  color: AppColors.kPrimaryColor,
+                                  fontSize: AppSizes.s16,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print('Login tapped');
+                                    navigateBack(context);
+                                  },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.s20),
+                      ],
+                    ),
                   ),
                 ),
               ),

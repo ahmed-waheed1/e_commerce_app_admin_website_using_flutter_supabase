@@ -21,10 +21,20 @@ class AppStrings {
   static const String bestSeller = 'Best Seller';
   static const String newArrivals = 'New Arrivals';
   static const String prductName = 'Product Name';
+  static const String yourFavoriteProducts = 'Your Favorite Products';
   static const String productDescription = 'Product Description';
+  static const String updateProfile = 'Update Profile';
+  static const String editProfile = 'Edit Profile';
+  static const String editName = 'Edit Name';
+  static const String update = 'Update';
+  static const String myOrders = 'My Orders';
+  static const String logout = 'Logout';
+  static const String orderHistory = 'Order History';
   static const String oldPrice = '\$100.00';
   static const String newPrice = '\$80.00';
   static const String addToCart = 'Add to Cart';
   static const String imageUrl =
       'https://img.freepik.com/free-vector/sale-banner-with-product-description_1361-1333.jpg?t=st=1742339904~exp=1742343504~hmac=f1b53a5c1c08f31a14b5820ddc37decb09afd42a4fc98afec5f05efde05a743f&w=1380';
+
+  static const String passwordResetSuccess = 'Password reset email sent successfully. Please check your inbox.';
 }

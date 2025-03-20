@@ -28,8 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cached_network_image: 
-  shimmer: ^3.0.0
+  cached_network_image: null
   cupertino_icons: ^1.0.8
   dio: null
   equatable: ^2.0.7
@@ -39,12 +38,16 @@ dependencies:
   flutter_automation: null
   flutter_bloc: null
   flutter_rating_bar: null
+  flutter_secure_storage: ^9.2.4
   get: ^4.6.5
+  get_it: ^8.0.3
   google_fonts: 4.0.4
   google_nav_bar: ^5.0.7
   google_sign_in: null
   line_icons: ^2.0.3
+  logger: ^2.5.0
   pay_with_paymob: null
+  shimmer: ^3.0.0
   supabase_flutter: null
 
 dev_dependencies:

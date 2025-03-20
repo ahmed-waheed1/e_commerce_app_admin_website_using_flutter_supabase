@@ -1,6 +1,5 @@
 part of 'authentication_cubit.dart';
 
-@immutable
 sealed class AuthenticationState {}
 
 final class AuthenticationInitial extends AuthenticationState {}
@@ -41,7 +40,11 @@ final class PasswordResetLoading extends AuthenticationState {}
 
 final class PasswordResetSuccess extends AuthenticationState {}
 
-final class PasswordResetError extends AuthenticationState {}
+final class PasswordResetError extends AuthenticationState {
+  final String errorMessage;
+
+  PasswordResetError(this.errorMessage);
+}
 
 final class UserDataAddedLoading extends AuthenticationState {}
 
@@ -51,6 +54,14 @@ final class UserDataAddedError extends AuthenticationState {}
 
 final class GetUserDataLoading extends AuthenticationState {}
 
-final class GetUserDataSuccess extends AuthenticationState {}
+final class GetUserDataSuccess extends AuthenticationState {
+  final UserDataModel? userDataModel;
 
-final class GetUserDataError extends AuthenticationState {}
+  GetUserDataSuccess(this.userDataModel);
+}
+
+final class GetUserDataError extends AuthenticationState {
+  final String errorMessage;
+
+  GetUserDataError(this.errorMessage);
+}

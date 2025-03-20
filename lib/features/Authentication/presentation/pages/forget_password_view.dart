@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/common_widgets/custom_elevated_button.dart';
 import '../../../../core/common_widgets/custom_text_form_feild.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
-import '../../../../core/common_widgets/custom_elevated_button.dart';
+import '../cubit/authentication_cubit.dart';
 
 class ForgetPasswordView extends StatelessWidget {
   static const String routeName = '/forget-password-view';
@@ -13,6 +15,8 @@ class ForgetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -40,13 +44,41 @@ class ForgetPasswordView extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomTextFormFeild(
+                        controller: emailController,
                         labelText: AppStrings.email,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: AppSizes.s20),
-                      CustomElevatedButton(
-                        onPressed: () {},
-                        widget: Text(AppStrings.resetPassword),
+                      BlocConsumer<AuthenticationCubit, AuthenticationState>(
+                        listener: (context, state) {
+                          if (state is PasswordResetSuccess) {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text(AppStrings.passwordResetSuccess)),
+                            );
+                          } else if (state is PasswordResetError) {
+                            // Show error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(state.errorMessage)),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is PasswordResetLoading) {
+                            return CircularProgressIndicator();
+                          }
+                          return CustomElevatedButton(
+                            onPressed: () {
+                              final email = emailController.text;
+                              context
+                                  .read<AuthenticationCubit>()
+                                  .resetPassword(email: email);
+                            },
+                            widget: Text(AppStrings.resetPassword),
+                          );
+                        },
                       ),
                     ],
                   ),

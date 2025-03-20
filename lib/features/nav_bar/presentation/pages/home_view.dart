@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/common_widgets/custom_cached_network_image.dart';
 import '../../../../core/common_widgets/custom_elevated_button.dart';
 import '../../../../core/common_widgets/custom_text_form_feild.dart';
 import '../../../../core/utils/app_colors.dart';
