@@ -21,6 +21,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit(this._repository) : super(AuthenticationInitial());
 
   Future<void> login() async {
+    if (!formKey.currentState!.validate()) return;
+
     emit(LoginLoading());
     try {
       await _repository.login(
@@ -39,6 +41,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> register() async {
+    if (!formKey.currentState!.validate()) return;
+
     emit(SignUpLoading());
     try {
       await _repository.register(
@@ -127,6 +131,34 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         e.toString(),
       ));
     }
+  }
+
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email cannot be empty';
+    }
+    final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!regex.hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password cannot be empty';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters long \n and contain at least one uppercase letter, one lowercase letter, and one number';
+    }
+    return null;
+  }
+
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name cannot be empty';
+    }
+    return null;
   }
 
   @override

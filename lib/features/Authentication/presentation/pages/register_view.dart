@@ -18,7 +18,7 @@ class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
@@ -57,6 +57,8 @@ class _RegisterViewState extends State<RegisterView> {
                               .nameController,
                           labelText: AppStrings.name,
                           keyboardType: TextInputType.name,
+                          validator:
+                              context.read<AuthenticationCubit>().validateName,
                         ),
                         const SizedBox(height: AppSizes.s20),
                         CustomTextFormFeild(
@@ -65,6 +67,8 @@ class _RegisterViewState extends State<RegisterView> {
                               .emailController,
                           labelText: AppStrings.email,
                           keyboardType: TextInputType.emailAddress,
+                          validator:
+                              context.read<AuthenticationCubit>().validateEmail,
                         ),
                         const SizedBox(height: AppSizes.s20),
                         BlocProvider(
@@ -78,6 +82,9 @@ class _RegisterViewState extends State<RegisterView> {
                                 labelText: AppStrings.password,
                                 keyboardType: TextInputType.visiblePassword,
                                 obscureText: !state,
+                                validator: context
+                                    .read<AuthenticationCubit>()
+                                    .validatePassword,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     state

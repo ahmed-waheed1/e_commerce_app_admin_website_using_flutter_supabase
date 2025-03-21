@@ -23,7 +23,7 @@ class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
@@ -32,28 +32,28 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Form(
-            key: context.read<AuthenticationCubit>().formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: AppSizes.s150),
-                Text(
-                  AppStrings.welcomeToOurMarketplace,
-                  style: getMediumStyle(
-                    color: AppColors.kBlackColor,
-                    fontSize: AppSizes.s24,
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: AppSizes.s150),
+              Text(
+                AppStrings.welcomeToOurMarketplace,
+                style: getMediumStyle(
+                  color: AppColors.kBlackColor,
+                  fontSize: AppSizes.s24,
                 ),
-                const SizedBox(height: AppSizes.s20),
-                Card(
-                  color: AppColors.kWhiteColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSizes.s16),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(AppSizes.s16),
+              ),
+              const SizedBox(height: AppSizes.s20),
+              Card(
+                color: AppColors.kWhiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.s16),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(AppSizes.s16),
+                  child: Form(
+                    key: context.read<AuthenticationCubit>().formKey,
                     child: Column(
                       children: [
                         CustomTextFormFeild(
@@ -61,6 +61,8 @@ class _LoginViewState extends State<LoginView> {
                               .read<AuthenticationCubit>()
                               .emailController,
                           labelText: AppStrings.email,
+                          validator:
+                              context.read<AuthenticationCubit>().validateEmail,
                         ),
                         const SizedBox(height: AppSizes.s20),
                         BlocProvider(
@@ -73,6 +75,9 @@ class _LoginViewState extends State<LoginView> {
                                     .passwordController,
                                 labelText: AppStrings.password,
                                 obscureText: !state,
+                                validator: context
+                                    .read<AuthenticationCubit>()
+                                    .validatePassword,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     state
@@ -182,8 +187,8 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

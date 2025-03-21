@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/services/service_locator.dart';
+import '../../../../core/utils/secret_data.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../models/user_data_model.dart';
 
@@ -27,10 +28,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<AuthResponse> googleSignIn() async {
-    const webClientId =
-        '1014945496493-3uuoad21o5u2vvs9e1lis8ui2csrienk.apps.googleusercontent.com';
-    const androidClientId =
-        '1014945496493-9s7gav9reppfmg6ildl1j2c81fa2loju.apps.googleusercontent.com';
+    const webClientId = webClientIdNumber;
+    const androidClientId = androidClientIdNumber;
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
       serverClientId: webClientId,
