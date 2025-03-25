@@ -12,6 +12,7 @@ void navigateOff(BuildContext context, Widget page) {
 void navigateAndRemoveUntil(BuildContext context, Widget page) {
   Get.offAll(() => page);
 }
+
 void navigateBack(BuildContext context) {
   Get.back();
 }

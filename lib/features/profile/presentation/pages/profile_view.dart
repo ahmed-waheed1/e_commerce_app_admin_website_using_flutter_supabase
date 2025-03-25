@@ -10,6 +10,7 @@ import '../../../Authentication/presentation/cubit/authentication_cubit.dart';
 import '../../../Authentication/presentation/pages/login_view.dart';
 import '../widgets/custom_profile_btn.dart';
 import 'edit_name_view.dart';
+import 'my_orders_view.dart';
 
 class ProfileView extends StatefulWidget {
   static const String routeName = '/profile_view';
@@ -85,8 +86,8 @@ class _ProfileViewState extends State<ProfileView> {
                         title: AppStrings.myOrders,
                         icon: Icons.settings,
                         onTap: () {
-                          print('Settings Tapped');
                           //todo navigate to settings screen
+                          navigateTo(context, const MyOrdersView());
                         },
                       ),
                       const SizedBox(height: AppSizes.s10),

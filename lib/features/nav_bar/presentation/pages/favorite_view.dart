@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/common_widgets/custom_product_list.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
-import '../widgets/custom_product_card.dart';
-import 'home_view.dart';
 
 class FavoriteView extends StatelessWidget {
   static const String routeName = '/favorite_view';
@@ -25,14 +24,7 @@ class FavoriteView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.s20),
-          ListView.builder(
-            itemCount: categories.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return CustomProductCard();
-            },
-          ),
+          CustomProductList(),
         ],
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import 'dio_config.dart';
@@ -11,7 +10,7 @@ class DioService {
     DioConfig.addInterceptors();
   }
 
-  Future<Either<String, dynamic>> post(
+  Future<Response> post(
     String endpoint, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -26,26 +25,28 @@ class DioService {
     );
   }
 
-  Future<Either<String, dynamic>> put(String endpoint, {dynamic data}) async {
+  Future<Response> put(String endpoint, {dynamic data}) async {
     return _handleRequest(() => _dio.put(endpoint, data: _formatData(data)));
   }
 
-  Future<Either<String, dynamic>> _handleRequest(
+  Future<Response> _handleRequest(
     Future<Response> Function() request,
   ) async {
     try {
       final response = await request();
-      return Right(response.data);
+      return response;
     } on DioException catch (e) {
-      return Left(_handleError(e));
+      throw Exception(_handleError(e));
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
     }
   }
 
-  Future<Either<String, dynamic>> delete(String endpoint) async {
+  Future<Response> delete(String endpoint) async {
     return _handleRequest(() => _dio.delete(endpoint));
   }
 
-  Future<Either<String, dynamic>> patch(String endpoint, {dynamic data}) async {
+  Future<Response> patch(String endpoint, {dynamic data}) async {
     return _handleRequest(() => _dio.patch(endpoint, data: _formatData(data)));
   }
 

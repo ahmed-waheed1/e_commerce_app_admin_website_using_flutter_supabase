@@ -48,7 +48,8 @@ class StoreView extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return CustomProductCard();
+              return SizedBox();
+              // CustomProductCard();
             },
           ),
         ],

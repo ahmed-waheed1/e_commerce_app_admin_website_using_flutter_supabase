@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/common_widgets/custom_elevated_button.dart';
+import '../../../../core/common_widgets/custom_product_list.dart';
 import '../../../../core/common_widgets/custom_text_form_feild.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
@@ -8,7 +9,6 @@ import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/images_manager.dart';
 import '../../../../core/utils/style_manager.dart';
 import '../../domain/entities/category.dart';
-import '../widgets/custom_product_card.dart';
 import '../widgets/popular_products.dart';
 
 class HomeView extends StatelessWidget {
@@ -52,14 +52,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.s10),
-          ListView.builder(
-            itemCount: categories.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return CustomProductCard();
-            },
-          ),
+          CustomProductList(),
         ],
       ),
     );

@@ -11,7 +11,9 @@ import 'features/Authentication/presentation/pages/forget_password_view.dart';
 import 'features/Authentication/presentation/pages/login_view.dart';
 import 'features/nav_bar/presentation/cubit/nav_bar_cubit.dart';
 import 'features/nav_bar/presentation/pages/main_home_view.dart';
+import 'features/nav_bar/presentation/pages/product_detials_view.dart';
 import 'features/profile/presentation/pages/edit_name_view.dart';
+import 'features/profile/presentation/pages/my_orders_view.dart';
 import 'features/profile/presentation/pages/profile_view.dart';
 
 Future<void> main() async {
@@ -50,6 +52,14 @@ class FlutterEcommerceApp extends StatelessWidget {
           GetPage(name: ProfileView.routeName, page: () => const ProfileView()),
           GetPage(
               name: EditNameView.routeName, page: () => const EditNameView()),
+          GetPage(
+            name: ProductDetialsView.routeName,
+            page: () => const ProductDetialsView(),
+          ),
+          GetPage(
+            name: MyOrdersView.routeName,
+            page: () => const MyOrdersView(),
+          ),
         ],
         initialRoute: locator<SupabaseClient>().auth.currentUser != null
             ? MainHomeView.routeName

@@ -36,5 +36,6 @@ class AppStrings {
   static const String imageUrl =
       'https://img.freepik.com/free-vector/sale-banner-with-product-description_1361-1333.jpg?t=st=1742339904~exp=1742343504~hmac=f1b53a5c1c08f31a14b5820ddc37decb09afd42a4fc98afec5f05efde05a743f&w=1380';
 
-  static const String passwordResetSuccess = 'Password reset email sent successfully. Please check your inbox.';
+  static const String passwordResetSuccess =
+      'Password reset email sent successfully. Please check your inbox.';
 }
