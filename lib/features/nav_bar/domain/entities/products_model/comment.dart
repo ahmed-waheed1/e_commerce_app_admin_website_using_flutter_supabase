@@ -8,6 +8,7 @@ class Comment extends Equatable {
   final String? forUser;
   final DateTime? createdAt;
   final String? forProduct;
+  final String? username; // Add this field
 
   const Comment({
     this.id,
@@ -15,6 +16,7 @@ class Comment extends Equatable {
     this.forUser,
     this.createdAt,
     this.forProduct,
+    this.username, // Add this field
   });
 
   factory Comment.fromMap(Map<String, dynamic> data) => Comment(
@@ -25,21 +27,23 @@ class Comment extends Equatable {
             ? null
             : DateTime.parse(data['created_at'] as String),
         forProduct: data['for_product'] as String?,
+        username: data['username'] as String?, // Add this field
       );
 
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'comment': comment,
-        'for_user': forUser,
-        'created_at': createdAt?.toIso8601String(),
-        'for_product': forProduct,
-      };
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = {};
+    if (comment != null) data['comment'] = comment;
+    if (forUser != null) data['for_user'] = forUser;
+    if (forProduct != null) data['for_product'] = forProduct;
+    if (username != null) data['username'] = username; // Add this field
+    return data;
+  }
 
   /// `dart:convert`
   ///
   /// Parses the string and returns the resulting Json object as [Comment].
-  factory Comment.fromJson(String data) {
-    return Comment.fromMap(json.decode(data) as Map<String, dynamic>);
+  factory Comment.fromJson(Map<String, dynamic> data) {
+    return Comment.fromMap(data);
   }
 
   /// `dart:convert`
@@ -53,6 +57,7 @@ class Comment extends Equatable {
     String? forUser,
     DateTime? createdAt,
     String? forProduct,
+    String? username, // Add this field
   }) {
     return Comment(
       id: id ?? this.id,
@@ -60,6 +65,7 @@ class Comment extends Equatable {
       forUser: forUser ?? this.forUser,
       createdAt: createdAt ?? this.createdAt,
       forProduct: forProduct ?? this.forProduct,
+      username: username ?? this.username, // Add this field
     );
   }
 
@@ -74,6 +80,7 @@ class Comment extends Equatable {
       forUser,
       createdAt,
       forProduct,
+      username, // Add this field
     ];
   }
 }

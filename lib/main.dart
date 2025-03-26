@@ -10,6 +10,7 @@ import 'features/Authentication/presentation/cubit/authentication_cubit.dart';
 import 'features/Authentication/presentation/pages/forget_password_view.dart';
 import 'features/Authentication/presentation/pages/login_view.dart';
 import 'features/nav_bar/presentation/cubit/nav_bar_cubit.dart';
+import 'features/nav_bar/presentation/pages/category_products_view.dart';
 import 'features/nav_bar/presentation/pages/main_home_view.dart';
 import 'features/nav_bar/presentation/pages/product_detials_view.dart';
 import 'features/profile/presentation/pages/edit_name_view.dart';
@@ -59,6 +60,10 @@ class FlutterEcommerceApp extends StatelessWidget {
           GetPage(
             name: MyOrdersView.routeName,
             page: () => const MyOrdersView(),
+          ),
+          GetPage(
+            name: CategoryProductsView.routeName,
+            page: () => const CategoryProductsView(),
           ),
         ],
         initialRoute: locator<SupabaseClient>().auth.currentUser != null

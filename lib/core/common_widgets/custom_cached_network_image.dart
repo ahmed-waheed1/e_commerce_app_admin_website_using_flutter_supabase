@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../utils/app_sizes.dart';
+
 class CustomCachedNetworkImage extends StatelessWidget {
   static const String routeName = '/custom_cached_network_image';
   final String imageUrl;
@@ -13,7 +15,10 @@ class CustomCachedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      height: AppSizes.s320,
+      width: double.infinity,
       imageUrl: imageUrl,
+      fit: BoxFit.fill,
       placeholder: (context, url) => Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,

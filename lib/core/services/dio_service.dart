@@ -18,7 +18,7 @@ class DioService {
     return _handleRequest(
       () => _dio.post(
         endpoint,
-        data: _formatData(data),
+        data:data,
         queryParameters: queryParameters,
         options: Options(),
       ),
@@ -47,7 +47,7 @@ class DioService {
   }
 
   Future<Response> patch(String endpoint, {dynamic data}) async {
-    return _handleRequest(() => _dio.patch(endpoint, data: _formatData(data)));
+    return _handleRequest(() => _dio.patch(endpoint, data: data));
   }
 
   Future<Response> get(
