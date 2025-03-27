@@ -7,6 +7,7 @@ import '../../features/Authentication/domain/repositories/authentication_reposit
 import '../../features/Authentication/presentation/cubit/authentication_cubit.dart';
 import '../../features/nav_bar/data/repositories/home_repository_implementation.dart';
 import '../../features/nav_bar/presentation/cubit/home_cubit.dart';
+import '../../features/nav_bar/presentation/cubit/product_detials_cubit.dart';
 import '../utils/secret_data.dart';
 import 'dio_service.dart';
 
@@ -39,4 +40,6 @@ Future<void> setupLocator() async {
   // Register HomeCubit
   locator.registerFactory(
       () => HomeCubit(locator<HomeRepositoryImplementation>()));
+  locator.registerFactory(
+      () => ProductDetialsCubit(locator<HomeRepositoryImplementation>()));
 }

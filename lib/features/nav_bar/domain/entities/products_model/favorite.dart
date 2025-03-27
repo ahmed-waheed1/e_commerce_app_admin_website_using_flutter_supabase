@@ -27,24 +27,18 @@ class Favorite extends Equatable {
         isFavorite: data['is_favorite'] as bool?,
       );
 
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'for_user': forUser,
-        'created_at': createdAt?.toIso8601String(),
-        'for_product': forProduct,
-        'is_favorite': isFavorite,
-      };
-
-  /// `dart:convert`
-  ///
-  /// Parses the string and returns the resulting Json object as [Favorite].
-  factory Favorite.fromJson(String data) {
-    return Favorite.fromMap(json.decode(data) as Map<String, dynamic>);
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = {};
+    if (forUser != null) data['for_user'] = forUser;
+    if (forProduct != null) data['for_product'] = forProduct;
+    if (isFavorite != null) data['is_favorite'] = isFavorite;
+    return data;
   }
 
-  /// `dart:convert`
-  ///
-  /// Converts [Favorite] to a JSON string.
+  factory Favorite.fromJson(Map<String, dynamic> data) {
+    return Favorite.fromMap(data);
+  }
+
   String toJson() => json.encode(toMap());
 
   Favorite copyWith({

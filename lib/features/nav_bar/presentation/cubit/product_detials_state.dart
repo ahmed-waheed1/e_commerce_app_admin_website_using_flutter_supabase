@@ -32,28 +32,6 @@ class ProductRatingError extends ProductDetialsState {
   List<Object> get props => [error];
 }
 
-// New state for category products
-class CategoryProductsLoading extends ProductDetialsState {}
-
-class CategoryProductsSuccess extends ProductDetialsState {
-  final List<ProductsModel> products;
-
-  const CategoryProductsSuccess(this.products);
-
-  @override
-  List<Object> get props => [products];
-}
-
-class CategoryProductsError extends ProductDetialsState {
-  final String error;
-
-  const CategoryProductsError(this.error);
-
-  @override
-  List<Object> get props => [error];
-}
-
-// New states for addOrUpdateRating
 class AddOrUpdateRatingLoading extends ProductDetialsState {}
 
 class AddOrUpdateRatingSuccess extends ProductDetialsState {
@@ -74,7 +52,6 @@ class AddOrUpdateRatingError extends ProductDetialsState {
   List<Object> get props => [error];
 }
 
-// New states for addComment
 class AddCommentLoading extends ProductDetialsState {}
 
 class AddCommentSuccess extends ProductDetialsState {
@@ -90,6 +67,87 @@ class AddCommentError extends ProductDetialsState {
   final String error;
 
   const AddCommentError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+class CategoryProductsLoading extends ProductDetialsState {}
+
+class CategoryProductsSuccess extends ProductDetialsState {
+  final List<ProductsModel> products;
+
+  const CategoryProductsSuccess(this.products);
+
+  @override
+  List<Object> get props => [products];
+}
+
+class CategoryProductsError extends ProductDetialsState {
+  final String error;
+
+  const CategoryProductsError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+// New states for handling favorites
+class AddFavoriteLoading extends ProductDetialsState {}
+
+class AddFavoriteSuccess extends ProductDetialsState {
+  final String message;
+
+  const AddFavoriteSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class AddFavoriteError extends ProductDetialsState {
+  final String error;
+
+  const AddFavoriteError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+class RemoveFavoriteLoading extends ProductDetialsState {}
+
+class RemoveFavoriteSuccess extends ProductDetialsState {
+  final String message;
+
+  const RemoveFavoriteSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class RemoveFavoriteError extends ProductDetialsState {
+  final String error;
+
+  const RemoveFavoriteError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+class GetFavoritesLoading extends ProductDetialsState {}
+
+class GetFavoritesSuccess extends ProductDetialsState {
+  final List<Favorite> favorites;
+
+  const GetFavoritesSuccess(this.favorites);
+
+  @override
+  List<Object> get props => [favorites];
+}
+
+class GetFavoritesError extends ProductDetialsState {
+  final String error;
+
+  const GetFavoritesError(this.error);
 
   @override
   List<Object> get props => [error];

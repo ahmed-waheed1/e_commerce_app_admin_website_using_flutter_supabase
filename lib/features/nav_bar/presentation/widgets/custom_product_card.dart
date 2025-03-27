@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/route_manager.dart';
 
 import '../../../../core/common_widgets/custom_cached_network_image.dart';
@@ -7,7 +8,9 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_sizes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/style_manager.dart';
+import '../../domain/entities/products_model/favorite.dart';
 import '../../domain/entities/products_model/products_model.dart';
+import '../cubit/product_detials_cubit.dart';
 import '../pages/product_detials_view.dart';
 
 class CustomProductCard extends StatelessWidget {
@@ -22,7 +25,6 @@ class CustomProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // todo implement navigate to product details
         Get.toNamed(
           ProductDetialsView.routeName,
           arguments: product,
@@ -75,12 +77,35 @@ class CustomProductCard extends StatelessWidget {
                       style: getMediumStyle(
                           color: AppColors.kBlackColor, fontSize: AppSizes.s20),
                     ),
-                    IconButton(
-                      color: AppColors.kGreyColor,
-                      onPressed: () {
-                        // todo implement see all functionality
+                    BlocBuilder<ProductDetialsCubit, ProductDetialsState>(
+                      builder: (context, state) {
+                        final isFavorite = state is GetFavoritesSuccess &&
+                            state.favorites.any((favorite) =>
+                                favorite.forProduct == product.productId);
+
+                        return IconButton(
+                          color: isFavorite
+                              ? AppColors.kPrimaryColor
+                              : AppColors.kGreyColor,
+                          onPressed: () {
+                            final cubit = context.read<ProductDetialsCubit>();
+                            if (isFavorite) {
+                              final favorite = state.favorites.firstWhere(
+                                  (favorite) =>
+                                      favorite.forProduct == product.productId);
+                              cubit.removeFavorite(favorite.id!);
+                            } else {
+                              cubit.addFavorite(Favorite(
+                                forProduct: product.productId,
+                                isFavorite: true,
+                              ));
+                            }
+                          },
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                          ),
+                        );
                       },
-                      icon: const Icon(Icons.favorite_rounded),
                     ),
                   ],
                 ),

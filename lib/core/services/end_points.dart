@@ -1,12 +1,19 @@
 class EndPoints {
   static const String apiBaseUrl =
       'https://hqmlbwzlrnmnkduzvfqf.supabase.co/rest/v1/';
-  static const String getAllProducts =
-      '${apiBaseUrl}products?select=*,favorites(*),purchases(*),comments(*),rates(*)';
-  static const String getProductRating =
-      '${apiBaseUrl}rates?select=*,products(*)&for_product=eq.';
-  static const String getProductRatingById =
-      '${apiBaseUrl}rates?select=*,products(*)&for_product=eq.';
+
+  static String getAllProducts() {
+    return '${apiBaseUrl}products?select=*,favorites(*),purchases(*),comments(*),rates(*)';
+  }
+
+  static String getProductRating(String productId) {
+    return '${apiBaseUrl}rates?select=*,products(*)&for_product=eq.$productId';
+  }
+
+  static String getProductRatingById(String productId) {
+    return '${apiBaseUrl}rates?select=*,products(*)&for_product=eq.$productId';
+  }
+
   static String addProductRating(String productId) {
     return '${apiBaseUrl}rates?select=*,products(*)&for_product=eq.$productId';
   }
@@ -23,9 +30,31 @@ class EndPoints {
     return '${apiBaseUrl}comments?select=*,products(*)&for_product=eq.$productId';
   }
 
-  static const String getAllUsers = '${apiBaseUrl}users';
+  static String getAllUsers() {
+    return '${apiBaseUrl}users';
+  }
 
   static String getProductsByCategory(String categoryName) {
     return '${apiBaseUrl}products?select=*&category=eq.$categoryName';
+  }
+
+  static String addFavorite() {
+    return '${apiBaseUrl}favorites';
+  }
+
+  static String updateFavorite(String favoriteId) {
+    return '${apiBaseUrl}favorites?id=eq.$favoriteId';
+  }
+
+  static String getFavorites(String userId) {
+    return '${apiBaseUrl}favorites?select=*&for_user=eq.$userId';
+  }
+
+  static String getFavoritesByProduct(String userId, String productId) {
+    return '${apiBaseUrl}favorites?select=*&for_user=eq.$userId&for_product=eq.$productId';
+  }
+
+  static String removeFavorite(String favoriteId) {
+    return '${apiBaseUrl}favorites?id=eq.$favoriteId';
   }
 }

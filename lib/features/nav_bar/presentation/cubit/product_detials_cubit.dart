@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../Authentication/data/models/user_data_model.dart';
 import '../../data/repositories/home_repository_implementation.dart';
 import '../../domain/entities/products_model/comment.dart';
+import '../../domain/entities/products_model/favorite.dart';
 import '../../domain/entities/products_model/products_model.dart';
 import '../../domain/entities/products_model/rate.dart';
 
@@ -68,6 +69,36 @@ class ProductDetialsCubit extends Cubit<ProductDetialsState> {
       emit(CategoryProductsSuccess(products));
     } catch (e) {
       emit(CategoryProductsError(e.toString()));
+    }
+  }
+
+  Future<void> addFavorite(Favorite favorite) async {
+    emit(AddFavoriteLoading());
+    try {
+      await homeRepoImple.addFavorite(favorite);
+      emit(AddFavoriteSuccess('Favorite added successfully'));
+    } catch (e) {
+      emit(AddFavoriteError(e.toString()));
+    }
+  }
+
+  Future<void> removeFavorite(String favoriteId) async {
+    emit(RemoveFavoriteLoading());
+    try {
+      await homeRepoImple.removeFavorite(favoriteId);
+      emit(RemoveFavoriteSuccess('Favorite removed successfully'));
+    } catch (e) {
+      emit(RemoveFavoriteError(e.toString()));
+    }
+  }
+
+  Future<void> getFavorites(String userId) async {
+    emit(GetFavoritesLoading());
+    try {
+      final List<Favorite> favorites = await homeRepoImple.getFavorites(userId);
+      emit(GetFavoritesSuccess(favorites));
+    } catch (e) {
+      emit(GetFavoritesError(e.toString()));
     }
   }
 

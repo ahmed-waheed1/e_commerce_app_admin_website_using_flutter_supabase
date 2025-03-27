@@ -5,8 +5,9 @@ import 'package:uuid/uuid.dart';
 import '../../../../core/services/dio_service.dart';
 import '../../../../core/services/end_points.dart';
 import '../../../../core/services/service_locator.dart';
-import '../../../Authentication/data/models/user_data_model.dart';
+import '../../../Authentication/data/models/user_data_model.dart'; // Import UserDataModel
 import '../../domain/entities/products_model/comment.dart';
+import '../../domain/entities/products_model/favorite.dart'; // Import Favorite
 import '../../domain/entities/products_model/products_model.dart';
 import '../../domain/entities/products_model/rate.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -21,7 +22,7 @@ class HomeRepositoryImplementation implements HomeRepository {
   Future<List<ProductsModel>> getHomeData() async {
     try {
       final response = await dioService.get(
-        EndPoints.getAllProducts,
+        EndPoints.getAllProducts(),
       );
       logger.d('Response: ${response.data}');
       logger.d('Status Code: ${response.statusCode}');
@@ -59,7 +60,7 @@ class HomeRepositoryImplementation implements HomeRepository {
         throw Exception('Invalid productId');
       }
       final response = await dioService.get(
-        '${EndPoints.getProductRating}$productId',
+        EndPoints.getProductRating(productId),
       );
       logger.d('Response: ${response.data}');
       logger.d('Status Code: ${response.statusCode}');
@@ -215,7 +216,7 @@ class HomeRepositoryImplementation implements HomeRepository {
   Future<Map<String, UserDataModel>> getUserMap() async {
     try {
       final response = await dioService.get(
-        EndPoints.getAllUsers,
+        EndPoints.getAllUsers(),
       );
       logger.d('Response: ${response.data}');
       logger.d('Status Code: ${response.statusCode}');
@@ -275,6 +276,130 @@ class HomeRepositoryImplementation implements HomeRepository {
       }
     } catch (e) {
       logger.e('Exception: $e');
+      throw Exception('Unexpected error occurred');
+    }
+  }
+
+  @override
+  Future<void> addFavorite(Favorite favorite) async {
+    try {
+      favorite = favorite.copyWith(forUser: userId);
+      final existingFavorite =
+          await getFavoriteByProduct(favorite.forProduct!, userId);
+      if (existingFavorite != null) {
+        final response = await dioService.patch(
+          EndPoints.updateFavorite(existingFavorite.id!),
+          data: favorite.toMap(),
+        );
+        logger.d('Response: ${response.data}');
+        logger.d('Status Code: ${response.statusCode}');
+        logger.d('Status Message: ${response.statusMessage}');
+        if (response.statusCode != 200) {
+          throw Exception('Failed to update favorite');
+        }
+      } else {
+        final response = await dioService.post(
+          EndPoints.addFavorite(),
+          data: favorite.toMap(),
+        );
+        logger.d('Response: ${response.data}');
+        logger.d('Status Code: ${response.statusCode}');
+        logger.d('Status Message: ${response.statusMessage}');
+        if (response.statusCode != 201) {
+          throw Exception('Failed to add favorite');
+        }
+      }
+    } catch (e) {
+      logger.e('Exception from addFavorite: $e');
+      throw Exception(
+          'Unexpected error occurred while adding/updating favorite');
+    }
+  }
+
+  @override
+  Future<void> removeFavorite(String favoriteId) async {
+    try {
+      final response = await dioService.delete(
+        EndPoints.removeFavorite(favoriteId),
+      );
+      logger.d('Response: ${response.data}');
+      logger.d('Status Code: ${response.statusCode}');
+      logger.d('Status Message: ${response.statusMessage}');
+      if (response.statusCode != 200) {
+        throw Exception('Failed to remove favorite');
+      }
+    } catch (e) {
+      logger.e('Exception from removeFavorite: $e');
+      throw Exception('Unexpected error occurred while removing favorite');
+    }
+  }
+
+  @override
+  Future<List<Favorite>> getFavorites(String userId) async {
+    try {
+      final response = await dioService.get(
+        EndPoints.getFavorites(userId),
+      );
+      logger.d('Response: ${response.data}');
+      logger.d('Status Code: ${response.statusCode}');
+      logger.d('Status Message: ${response.statusMessage}');
+      if (response.statusCode == 200) {
+        logger.d('Data: ${response.data}');
+        List<Favorite> favorites = (response.data as List)
+            .map((item) => Favorite.fromJson(item))
+            .toList();
+        return favorites;
+      } else if (response.statusCode == 401) {
+        logger.e('Unauthorized: ${response.statusMessage}');
+        throw Exception('Unauthorized');
+      } else if (response.statusCode == 404) {
+        logger.e('Not Found: ${response.statusMessage}');
+        throw Exception('Not Found');
+      } else if (response.statusCode == 500) {
+        logger.e('Server Error: ${response.statusMessage}');
+        throw Exception('Server Error');
+      } else {
+        logger.e('Error: ${response.statusCode} - ${response.statusMessage}');
+        throw Exception('Unexpected error occurred');
+      }
+    } catch (e) {
+      logger.e('Exception from getFavorites: $e');
+      throw Exception('Unexpected error occurred');
+    }
+  }
+
+  @override
+  Future<Favorite?> getFavoriteByProduct(
+      String productId, String userId) async {
+    try {
+      final response = await dioService.get(
+        EndPoints.getFavoritesByProduct(userId, productId),
+      );
+      logger.d('Response: ${response.data}');
+      logger.d('Status Code: ${response.statusCode}');
+      logger.d('Status Message: ${response.statusMessage}');
+      if (response.statusCode == 200) {
+        if (response.data.isNotEmpty) {
+          logger.d('Data: ${response.data}');
+          return Favorite.fromJson(response.data[0] as Map<String, dynamic>);
+        } else {
+          return null;
+        }
+      } else if (response.statusCode == 401) {
+        logger.e('Unauthorized: ${response.statusMessage}');
+        throw Exception('Unauthorized');
+      } else if (response.statusCode == 404) {
+        logger.e('Not Found: ${response.statusMessage}');
+        return null;
+      } else if (response.statusCode == 500) {
+        logger.e('Server Error: ${response.statusMessage}');
+        throw Exception('Server Error');
+      } else {
+        logger.e('Error: ${response.statusCode} - ${response.statusMessage}');
+        throw Exception('Unexpected error occurred');
+      }
+    } catch (e) {
+      logger.e('Exception from getFavoriteByProduct: $e');
       throw Exception('Unexpected error occurred');
     }
   }
